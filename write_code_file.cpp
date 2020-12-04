@@ -1,59 +1,54 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int isUpOrDown(int a,int b,int c,int x,int y)
+double distance(int a,int b,int x,int y)
 {
-    if (a + b * x + c * y > 0)
-    {
-        return 1;
-    }
-    else
-    {
-        return -1;
-    }
+    return pow(x-a,2)+pow(y-b,2);
 }
 
-struct P
+struct p_person
 {
-    int x;
-    int y;
-    char type;
-};
-struct Line
-{
-    /*  a+bx+cy=0  */
-    int a;
-    int b;
-    int c;
+    int flag_inputNum;//坐标，输入的第几个
+    double dis;
 };
 
 int main()
 {
-    int n, m;
-    struct P point[1010];
-    struct Line num[21];
-    cin >> n >> m;
-    for (int i = 0; i < n; i++) {
-        cin >> point[i].x >> point[i].y >> point[i].type;
+    int n,X,Y;
+    struct p_person test[210]={0};
+    cin>>n>>X>>Y;
+    for (int i=0;i<n;i++)
+    {
+        int x,y;
+        cin>>x>>y;
+        test[i].flag_inputNum=i+1;
+        test[i].dis=distance(x,y,X,Y);
     }
-    for (int i = 0; i < m; i++) {
-        int flag=0;
-        cin >> num[i].a >> num[i].b >> num[i].c;
-        for (int j = 0; j < n; j++) {
-            if (point[j].type == 'A') {
-                flag+=isUpOrDown(num[i].a, num[i].b, num[i].c, point[j].x, point[j].y);
+//    从小到大排序
+    for (int i=0;i<n-1;i++)
+    {
+        for(int j=i+1;j<n;j++)
+        {
+            if(test[i].dis>test[j].dis)
+            {
+                struct p_person temp=test[i];
+                test[i]=test[j];
+                test[j]=temp;
             }
-            else {
-                flag-= isUpOrDown(num[i].a, num[i].b, num[i].c, point[j].x, point[j].y);
+            else if(test[i].dis==test[j].dis)
+            {
+                if(test[i].flag_inputNum>test[j].flag_inputNum)
+                {
+                    struct p_person temp=test[i];
+                    test[i]=test[j];
+                    test[j]=temp;
+                }
             }
-        }
-        if (abs(flag)==n) {
-            cout << "Yes" << endl;
-        }
-        else {
-            cout << "No" << endl;
         }
     }
-
+    for(int i=0;i<3;i++)
+    {
+        cout<<test[i].flag_inputNum<<endl;
+    }
     return 0;
 }
