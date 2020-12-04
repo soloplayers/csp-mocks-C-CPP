@@ -1,54 +1,43 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-double distance(int a,int b,int x,int y)
+int n,k,t,xl,yd,xr,yu;
+int flag_pass,flag_play;
+int num_pass=0,num_play=0;
+bool flag;
+bool isInArea(int a,int b)
 {
-    return pow(x-a,2)+pow(y-b,2);
+    return (a<=xr&&a>=xl)&&(b<=yu&&b>=yd);
 }
-
-struct p_person
-{
-    int flag_inputNum;//坐标，输入的第几个
-    double dis;
-};
-
 int main()
 {
-    int n,X,Y;
-    struct p_person test[210]={0};
-    cin>>n>>X>>Y;
-    for (int i=0;i<n;i++)
+    cin>>n>>k>>t>>xl>>yd>>xr>>yu;
+    while (n--)
     {
-        int x,y;
-        cin>>x>>y;
-        test[i].flag_inputNum=i+1;
-        test[i].dis=distance(x,y,X,Y);
-    }
-//    从小到大排序
-    for (int i=0;i<n-1;i++)
-    {
-        for(int j=i+1;j<n;j++)
+        flag_pass=0,flag_play=0,flag=false;//flag记录逗留人数是否重复记录的信号量
+        for(int i=0;i<t;i++)
         {
-            if(test[i].dis>test[j].dis)
+            int x,y;
+            cin>>x>>y;
+            if(isInArea(x,y))
             {
-                struct p_person temp=test[i];
-                test[i]=test[j];
-                test[j]=temp;
-            }
-            else if(test[i].dis==test[j].dis)
-            {
-                if(test[i].flag_inputNum>test[j].flag_inputNum)
+                flag_pass++;
+                flag_play++;
+                if(flag_play==k&&!flag)
                 {
-                    struct p_person temp=test[i];
-                    test[i]=test[j];
-                    test[j]=temp;
+                    flag=true;
+                    num_play++;
                 }
             }
+            else
+            {
+                flag_play=0;
+            }
+        }
+        if(flag_pass)
+        {
+            num_pass++;
         }
     }
-    for(int i=0;i<3;i++)
-    {
-        cout<<test[i].flag_inputNum<<endl;
-    }
+    cout<<num_pass<<endl<<num_play<<endl;
     return 0;
 }
