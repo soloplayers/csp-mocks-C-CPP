@@ -1,43 +1,27 @@
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
-int n,k,t,xl,yd,xr,yu;
-int flag_pass,flag_play;
-int num_pass=0,num_play=0;
-bool flag;
-bool isInArea(int a,int b)
+
+struct P
 {
-    return (a<=xr&&a>=xl)&&(b<=yu&&b>=yd);
-}
-int main()
-{
-    cin>>n>>k>>t>>xl>>yd>>xr>>yu;
-    while (n--)
-    {
-        flag_pass=0,flag_play=0,flag=false;//flag记录逗留人数是否重复记录的信号量
-        for(int i=0;i<t;i++)
-        {
-            int x,y;
-            cin>>x>>y;
-            if(isInArea(x,y))
-            {
-                flag_pass++;
-                flag_play++;
-                if(flag_play==k&&!flag)
-                {
-                    flag=true;
-                    num_play++;
-                }
-            }
-            else
-            {
-                flag_play=0;
-            }
-        }
-        if(flag_pass)
-        {
-            num_pass++;
-        }
+    int index,value;
+};
+
+int main() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    struct P U[a + 1];
+    for (int i = 0; i < a; i++) {
+        cin >> U[i].index >> U[i].value;
     }
-    cout<<num_pass<<endl<<num_play<<endl;
-    return 0;
+    long long result = 0; //取值的绝对值为10^6，乘积为10^12，必须用long long型
+    int pointer = 0; //U向量的记录型指针
+    int index, value;
+    for (int i = 0; pointer < a && i < b; i++) {
+        cin >> index >> value;
+        while (pointer < a && index > U[pointer].index) pointer++;
+        if (index > U[a - 1].index) break; //如果V向量输入的index大于了U向量最大的index，后面的全是0不用考虑
+        if (pointer >= a) break;    //U向量对应的数据已经计算完，后面V向量的输入不用再考虑
+        if (index == U[pointer].index) result += U[pointer++].value * value;//计算完后pointer指针增1
+    }
+    cout << result;
 }
