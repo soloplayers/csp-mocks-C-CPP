@@ -1,43 +1,26 @@
-#include <iostream>
+#include<bits/stdc++.h>
 using namespace std;
-bool isPass(int a)
-{
-    if(a%7==0)
-    {
-        return true;
-    }
-    while (a)
-    {
-        if(a%10==7)
-        {
-            return true;
-        }
-        a/=10;
-    }
-    return false;
-}
+
 int main() {
-   int n,count=1;
-   cin>>n;
-   int people[4]={0};
-   for(int i=0;i<n;i++)
-   {
-       if(isPass(count))
-       {
-           n++;
-           people[i%4]+=1;
-       }
-       count++;
-   }
-   /*
-    * 这个语句过不了csp的编译真是服了
-    *
-    * for(int i:people)
-   {
-       cout<<i<<endl;
-   }*/
-   for(int i=0;i<4;i++)
-   {
-       cout<<people[i]<<endl;
-   }
+    int count_appleTree=0,count_minusApple=0,flag_minusApple=0;
+    int flag_treeNum,flag_max_minusApple=INT_MIN;
+    int ai0,aij;
+    int N,M;
+    cin>>N>>M;
+    for(int i=0;i<N;i++){
+        flag_minusApple=0;
+        cin>>ai0;
+        count_appleTree+=ai0;
+        for(int j=0;j<M;j++){
+            cin >> aij;
+            flag_minusApple-=aij;
+            count_minusApple -= aij;
+        }
+        if (flag_minusApple > flag_max_minusApple) {
+            flag_max_minusApple = flag_minusApple;
+            flag_treeNum = i + 1;
+        }
+    }
+    cout << count_appleTree - count_minusApple <<" "<< flag_treeNum <<" "<<flag_max_minusApple << endl;
+    return 0;
 }
