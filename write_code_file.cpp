@@ -1,26 +1,62 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-int main() {
-    int count_appleTree=0,count_minusApple=0,flag_minusApple=0;
-    int flag_treeNum,flag_max_minusApple=INT_MIN;
-    int ai0,aij;
-    int N,M;
-    cin>>N>>M;
-    for(int i=0;i<N;i++){
-        flag_minusApple=0;
-        cin>>ai0;
-        count_appleTree+=ai0;
-        for(int j=0;j<M;j++){
-            cin >> aij;
-            flag_minusApple-=aij;
-            count_minusApple -= aij;
+struct P{
+    int x,y;
+};
+int n,grades[5]={0};
+P points[1001];
+bool check(int x,int y){
+    int Four=0;
+    for(int i=0;i<n;i++){
+        if(x-1==points[i].x&&y==points[i].y){
+            Four++;
         }
-        if (flag_minusApple > flag_max_minusApple) {
-            flag_max_minusApple = flag_minusApple;
-            flag_treeNum = i + 1;
+        if(x+1==points[i].x&&y==points[i].y){
+            Four++;
+        }
+        if(x==points[i].x&&y-1==points[i].y){
+            Four++;
+        }
+        if(x==points[i].x&&y+1==points[i].y){
+            Four++;
         }
     }
-    cout << count_appleTree - count_minusApple <<" "<< flag_treeNum <<" "<<flag_max_minusApple << endl;
-    return 0;
+    if(Four==4){
+        return true;
+    }
+    return false;
+}
+
+int statistic(int x,int y){
+    int grade=0;
+    for(int i=0;i<n;i++){
+        if(x-1==points[i].x&&y-1==points[i].y){
+            grade++;
+        }
+        if(x-1==points[i].x&&y+1==points[i].y){
+            grade++;
+        }
+        if(x+1==points[i].x&&y-1==points[i].y){
+            grade++;
+        }
+        if(x+1==points[i].x&&y+1==points[i].y){
+            grade++;
+        }
+    }
+    return grade;
+}
+
+int main() {
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>points[i].x>>points[i].y;
+    }
+    for(int i=0;i<n;i++){
+        if(check(points[i].x,points[i].y)){
+            grades[statistic(points[i].x,points[i].y)]++;
+        }
+    }
+    for(int i=0;i<5;i++){
+        cout<<grades[i]<<endl;
+    }
 }
