@@ -1,62 +1,35 @@
 #include<bits/stdc++.h>
 using namespace std;
-struct P{
-    int x,y;
-};
-int n,grades[5]={0};
-P points[1001];
-bool check(int x,int y){
-    int Four=0;
-    for(int i=0;i<n;i++){
-        if(x-1==points[i].x&&y==points[i].y){
-            Four++;
-        }
-        if(x+1==points[i].x&&y==points[i].y){
-            Four++;
-        }
-        if(x==points[i].x&&y-1==points[i].y){
-            Four++;
-        }
-        if(x==points[i].x&&y+1==points[i].y){
-            Four++;
-        }
-    }
-    if(Four==4){
-        return true;
-    }
-    return false;
-}
-
-int statistic(int x,int y){
-    int grade=0;
-    for(int i=0;i<n;i++){
-        if(x-1==points[i].x&&y-1==points[i].y){
-            grade++;
-        }
-        if(x-1==points[i].x&&y+1==points[i].y){
-            grade++;
-        }
-        if(x+1==points[i].x&&y-1==points[i].y){
-            grade++;
-        }
-        if(x+1==points[i].x&&y+1==points[i].y){
-            grade++;
-        }
-    }
-    return grade;
-}
-
 int main() {
-    cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>points[i].x>>points[i].y;
+    int N, M, ai;
+    int positive;//统计最新的正整数
+    int flag_minus;//统计最新的蔬果数
+    bool flag[1001] = {false};
+    int T = 0, D = 0, E = 0;
+    cin >> N;
+    for (int i = 0; i < N; i++) {
+        cin >> M >> positive;
+        flag_minus = 0;
+        for (int j = 1; j < M; j++) {
+            cin >> ai;
+            if (ai > 0) {
+                if (!flag[i] && positive - flag_minus != ai) {
+                    flag[i] = true;
+                    D++;
+                }
+                positive = ai;
+                flag_minus = 0;
+            } else {
+                flag_minus -= ai;
+            }
+        }
+        T += positive - flag_minus;
     }
-    for(int i=0;i<n;i++){
-        if(check(points[i].x,points[i].y)){
-            grades[statistic(points[i].x,points[i].y)]++;
+    /* 围成一个圆圈，一般使用%取余操作 */
+    for (int i = 0; i < N; i++) {
+        if (flag[i] && flag[(i + 1) % N] && flag[(i + 2) % N]) {
+            E++;
         }
     }
-    for(int i=0;i<5;i++){
-        cout<<grades[i]<<endl;
-    }
+    cout << T << " " << D << " " << E << endl;
 }
